@@ -4,21 +4,27 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
+  Alert,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ListUser from "../components/UserGroup";
+import ListUseradd from "../components/UserGroup/index2";
+import { useNavigation } from "@react-navigation/native";
+import { host } from "../src/API";
 
 export default function CreateGroupChat() {
   const [search, setSearch] = useState("");
-  const [user, setUser] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
   let STORAGE_KEY = "@user_input";
+  const [groupChatName, setGroupChatName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const navigation = useNavigation();
+  let STORAGE_KEY1 = "@chatID";
   const timkiem = async () => {
     try {
-      await clearArray();
       const token = await AsyncStorage.getItem(STORAGE_KEY);
       const config = {
         headers: {
@@ -27,29 +33,70 @@ export default function CreateGroupChat() {
         },
       };
       const { data } = await axios.get(
-        `http://172.16.20.11:5000/api/user?search=${search}`,
+        `${host}/api/user?search=${search}`,
         config
       );
-      setUser(...user, data);
-      console.log("Array user saved: ", user);
+      setSearchResult(data);
     } catch (error) {
       console.log("Lỗi get uer bang search ", error);
     }
   };
 
-  const clearArray = () => {
-    setUser([]);
-    console.log("đã clear: ", user);
+  const handleGroup = (userToAdd: any) => {
+    if (selectedUsers.includes(userToAdd)) {
+      Alert.alert(userToAdd.name + " đã được thêm vào phòng");
+      return;
+    }
+    setSelectedUsers([...selectedUsers, userToAdd]);
+  };
+
+  const handleDelete = (delUser: never) => {
+    setSelectedUsers(selectedUsers.filter((sel) => sel._id !== delUser._id));
+  };
+
+  const handleSubmit = async () => {
+    if (!groupChatName || !selectedUsers) {
+      Alert.alert("Tên group trống hoặc chưa có người nào trong group!!");
+      return;
+    }
+    try {
+      const token = await AsyncStorage.getItem(STORAGE_KEY);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      };
+      const { data } = await axios.post(
+        `${host}/api/chat/groupMobile`,
+        {
+          name: groupChatName,
+          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+        },
+        config
+      );
+      navigation.navigate("ChatRoom", { name: groupChatName });
+      await AsyncStorage.setItem(STORAGE_KEY1, data).catch((e) =>
+        console.log("Lỗi khi lưu chatID trong ContactListItem", e)
+      );
+    } catch (error) {
+      console.log(" ", error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.a}>
         <View style={styles.textInput1}>
-          <TextInput placeholder={"Nhập tên group.."} />
+          <TextInput
+            placeholder={"Nhập tên group.."}
+            onChangeText={(e) => {
+              setGroupChatName(e);
+            }}
+          />
         </View>
         <View style={styles.create}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSubmit}>
             <Text style={{ color: "white" }}>Create group</Text>
           </TouchableOpacity>
         </View>
@@ -58,20 +105,28 @@ export default function CreateGroupChat() {
         <View style={styles.textInput}>
           <TextInput
             placeholder={"Nhập tên ..."}
+            value={search}
             onChangeText={(value) => setSearch(value)}
             onChange={timkiem}
           />
         </View>
-        <TouchableOpacity onPress={clearArray}>
+        <TouchableOpacity onPress={timkiem}>
           <FontAwesome name="search" size={30} color="black" />
         </TouchableOpacity>
       </View>
+      <View style={styles.arrayUser}>
+        {selectedUsers.map((u) => (
+          <ListUseradd key={u._id} user={u} onclick={() => handleDelete(u)} />
+        ))}
+      </View>
       <View>
-        <FlatList
-          data={user}
-          renderItem={({ item }) => <ListUser user={item} />}
-          keyExtractor={(item) => item.id}
-        />
+        {searchResult?.slice(0, 4).map((user) => (
+          <ListUser
+            user={user}
+            key={user._id}
+            onclick={() => handleGroup(user)}
+          />
+        ))}
       </View>
     </View>
   );
@@ -80,6 +135,9 @@ export default function CreateGroupChat() {
 const styles = StyleSheet.create({
   container: {
     margin: 10,
+  },
+  arrayUser: {
+    marginTop: 10,
   },
   textInput: {
     alignItems: "center",

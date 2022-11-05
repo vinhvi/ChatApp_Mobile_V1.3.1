@@ -7,9 +7,8 @@ import {
   StyleSheet,
 } from "react-native";
 import ChatMessage from "../components/ChatMessage";
-import InputBox from "../components/InputBox";
-import BG from "../assets/images/BG.png";
-import React, { useEffect, useState } from "react";
+import BG from "./../assets/images/BG.png";
+import React, { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import io from "socket.io-client";
@@ -24,18 +23,20 @@ import {
 import Colors from "../constants/Colors";
 
 const ChatRoomScreen = () => {
-  const socket = io(host);
+  const scrollViewRef = useRef();
   const [newMessages, setNewMessages] = useState("");
-  // const [socketConnected, setSocketConnected] = useState(false);
   const [token1, setToken1] = useState("");
   const [chatID, setChatID] = useState("");
   const [messages, setMessage] = useState([]);
   let STORAGE_KEY = "@user_input";
+  let STORAGE_KEY1 = "@user";
   let STORAGE_KEY2 = "@chatID";
 
-  const getMessage = async () => {
+  const getMessage = async (socket: any) => {
     try {
       const token = await AsyncStorage.getItem(STORAGE_KEY);
+      const user = await AsyncStorage.getItem(STORAGE_KEY1);
+      socket.emit("setup", user);
       setToken1(token);
       const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
       setChatID(chatID2);
@@ -46,7 +47,7 @@ const ChatRoomScreen = () => {
         },
       };
       const { data } = await axios.get(
-        `http://172.16.20.11:5000/api/message/${chatID2}`,
+        `${host}/api/message/${chatID2}`,
         config
       );
       setMessage(data);
@@ -55,21 +56,34 @@ const ChatRoomScreen = () => {
       console.log(e);
     }
   };
-
   useEffect(() => {
-    getMessage();
-  }, []);
-  useEffect(() => {
+    const socket = io(host);
+    getMessage(socket);
     socket.on("message recieved", (newMessageRecieved) => {
-      setMessage([...messages, newMessageRecieved]);
+      if (
+        !chatID || // if chat is not selected or doesn't match current chat
+        chatID !== newMessageRecieved.chat._id
+      ) {
+        console.log("iffffffff");
+        // if (!notification.includes(newMessageRecieved)) {
+        //   // set notification
+        //   setNotification([newMessageRecieved, ...notification]);
+        //   setFetchAgain(!fetchAgain);
+        // }
+      } else {
+        console.log("id cua phong chat: ", chatID);
+        console.log("ChatRoomScreen: ", newMessageRecieved);
+        setMessage([...messages, newMessageRecieved]);
+      }
     });
-  }, []);
+  }, [messages]);
 
   const onMicroPhone = () => {
     console.warn("on the microphone for you !!");
   };
 
   const sendMessage = async () => {
+    const socket = io(host);
     try {
       const config = {
         headers: {
@@ -105,6 +119,11 @@ const ChatRoomScreen = () => {
   return (
     <ImageBackground source={BG} style={{ width: "100%", height: "100%" }}>
       <FlatList
+        ref={scrollViewRef}
+        onContentSizeChange={() =>
+          scrollViewRef.current.scrollToEnd({ animated: true })
+        }
+        // ListFooterComponent={({ item }) => <ChatMessage message={item} />}
         data={messages}
         renderItem={({ item }) => <ChatMessage message={item} />}
       />
@@ -161,7 +180,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 25,
     marginRight: 10,
-    marginBottom: 50,
+    marginBottom: 10,
     flex: 1,
   },
   textInput: {

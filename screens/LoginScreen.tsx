@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import { useForm, Controller } from "react-hook-form";
@@ -14,6 +14,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  BackHandler,
 } from "react-native";
 import { loginRoute } from "../src/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,6 +24,8 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   let STORAGE_KEY = "@user_input";
   let STORAGE_KEY2 = "@user_id";
+  let STORAGE_KEY3 = "@user";
+
   const onSignInPressed = async (data: any) => {
     if (loading) {
       return;
@@ -32,19 +35,25 @@ export default function LoginScreen() {
       const email = data.email;
       const password = data.password;
       const config = {
+        crossDomain: true,
         headers: {
           "Content-type": "application/json",
         },
       };
       const a = await axios.post(loginRoute, { email, password }, config);
       console.log(a.data.token);
+      const user = JSON.stringify(a.data);
       try {
         await AsyncStorage.setItem(STORAGE_KEY, a.data.token);
+        await AsyncStorage.setItem(STORAGE_KEY3, user);
+        await AsyncStorage.setItem("keepLogin", JSON.stringify(true));
+        // console.log("user: ", user);
+
         await AsyncStorage.setItem(STORAGE_KEY2, a.data._id);
       } catch (err) {
         console.log(err);
       }
-      navigation.navigate("Root");
+      navigation.navigate("Root1");
     } catch (error) {
       console.log(error);
     }

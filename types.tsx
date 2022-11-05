@@ -13,11 +13,14 @@ declare global {
 
 export type RootStackParamList = {
   Login: undefined;
+  Login1: undefined;
   SignUp: undefined;
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  Root1: NavigatorScreenParams<RootTabParamList> | undefined;
   ChatRoom: undefined;
   Contact: undefined;
   CreateGroupChat: undefined;
+  LogOut: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -46,6 +49,7 @@ export type Message = {
   sender: User;
   content: string;
   chat: ChatRoom;
+  recallMessage: Number;
   createdAt: string;
 };
 export type ChatRoom = {

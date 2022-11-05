@@ -15,28 +15,30 @@ const ChatListItem = (props: ChatRoomProps) => {
   const [arrayId, setarrId] = useState([]);
   let STORAGE_KEY = "@chatID";
   const [chatName1, setChatName] = useState("");
+  const [time, setTime] = useState("");
+
   const navigation = useNavigation();
   const [lastMessage, setLastMessage] = useState("");
   const user = chatRoom.users[1];
   const onclick = async () => {
-    navigation.navigate("ChatRoom", { name: chatName1 });
+    navigation.navigate("ChatRoom", { name: chatName1, image: user.pic });
     try {
       await AsyncStorage.setItem(STORAGE_KEY, idChat);
     } catch (error) {
       console.log(error);
     }
   };
-  // console.log("data chatRoom", idChat);
+
   const check = () => {
     if (chatRoom.latestMessage != null) {
       let a = chatRoom.latestMessage.content;
       setLastMessage(a);
+      setTime(chatRoom.latestMessage.createdAt);
     } else {
       return;
     }
   };
 
-  // console.log(arrayId);
   useEffect(() => {
     const setName = () => {
       if (chatRoom.isGroupChat != true) {
@@ -61,9 +63,7 @@ const ChatListItem = (props: ChatRoomProps) => {
             </Text>
           </View>
         </View>
-        {/* <Text style={style.time}>
-          {moment(chatRoom.latestMessage.createdAt).format("DD/MM/YYYY")}
-        </Text> */}
+        <Text style={style.time}>{moment(time).format("DD/MM/YYYY")}</Text>
       </View>
     </TouchableNativeFeedback>
   );

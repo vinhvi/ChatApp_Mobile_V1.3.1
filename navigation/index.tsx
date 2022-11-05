@@ -9,6 +9,7 @@ import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
+  useNavigation,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
@@ -26,6 +27,9 @@ import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CreateGroupChat from "../screens/CreateGroupChat";
+import { useEffect, useState } from "react";
+import { Text } from "../components/Themed";
+import Logout from "../screens/DX";
 
 export default function Navigation({
   colorScheme,
@@ -49,6 +53,21 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const navigation = useNavigation();
+  const dangXuat = () => {
+    navigation.navigate("LogOut");
+  };
+  let STORAGE_KEY = "@user_input";
+  const [login, setLogin] = useState(false);
+  const keepLogin = async () => {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEY);
+      setLogin(data);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    keepLogin();
+  }, [login]);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -62,10 +81,93 @@ function RootNavigator() {
         },
       }}
     >
+      {!login ? (
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: "" }}
+        />
+      ) : (
+        <Stack.Screen
+          name="Root"
+          component={BottomTabNavigator}
+          options={({ navigation }) => ({
+            title: "",
+            headerLeft: () => (
+              <View
+                style={{
+                  backgroundColor: "#0C6157",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  marginRight: 10,
+                }}
+              >
+                <TouchableNativeFeedback onPress={dangXuat}>
+                  <FontAwesome name="user-circle-o" size={30} color="white" />
+                </TouchableNativeFeedback>
+                <Text
+                  style={{ color: "white", fontWeight: "bold", fontSize: 20 }}
+                >
+                  MESSAGE
+                </Text>
+                <View style={{ marginRight: 40 }}>
+                  <TouchableNativeFeedback
+                    onPress={() => {
+                      navigation.navigate("CreateGroupChat");
+                    }}
+                  >
+                    <AntDesign name="plus" size={30} color="white" />
+                  </TouchableNativeFeedback>
+                </View>
+              </View>
+            ),
+          })}
+        />
+      )}
       <Stack.Screen
-        name="Login"
+        name="Login1"
         component={LoginScreen}
-        options={{ title: "" }}
+        options={() => ({
+          title: "",
+          headerLeft: () => <View></View>,
+        })}
+      />
+      <Stack.Screen
+        name="Root1"
+        component={BottomTabNavigator}
+        options={({ navigation }) => ({
+          title: "",
+          headerLeft: () => (
+            <View
+              style={{
+                backgroundColor: "#0C6157",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+                marginRight: 10,
+              }}
+            >
+              <TouchableNativeFeedback onPress={dangXuat}>
+                <FontAwesome name="user-circle-o" size={30} color="white" />
+              </TouchableNativeFeedback>
+              <Text
+                style={{ color: "white", fontWeight: "bold", fontSize: 20 }}
+              >
+                MESSAGE
+              </Text>
+              <View style={{ marginRight: 40 }}>
+                <TouchableNativeFeedback
+                  onPress={() => {
+                    navigation.navigate("CreateGroupChat");
+                  }}
+                >
+                  <AntDesign name="plus" size={30} color="white" />
+                </TouchableNativeFeedback>
+              </View>
+            </View>
+          ),
+        })}
       />
       <Stack.Screen
         name="SignUp"
@@ -77,37 +179,8 @@ function RootNavigator() {
         component={CreateGroupChat}
         options={{ title: "Create Group Chat New!!" }}
       />
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={({ navigation }) => ({
-          title: "ChatApp",
-          headerRight: () => (
-            <View
-              style={{
-                backgroundColor: "#0C6157",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: 60,
-                marginRight: 10,
-              }}
-            >
-              <Octicons name="search" size={24} color={"white"} />
-              <TouchableNativeFeedback
-                onPress={() => {
-                  navigation.navigate("CreateGroupChat");
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="dots-vertical"
-                  size={24}
-                  color={"white"}
-                />
-              </TouchableNativeFeedback>
-            </View>
-          ),
-        })}
-      />
+
+      <Stack.Screen name="LogOut" component={Logout} options={{ title: "" }} />
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}

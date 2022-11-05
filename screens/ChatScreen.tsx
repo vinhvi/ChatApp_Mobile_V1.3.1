@@ -1,5 +1,4 @@
-import { useRoute } from "@react-navigation/native";
-import { FlatList, StyleSheet } from "react-native";
+import { BackHandler, FlatList, StyleSheet } from "react-native";
 import ChatListItem from "../components/ChatListItem";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -8,24 +7,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 import { getChatRom, host } from "../src/API";
-export default function ChatScreen({
-  navigation,
-}: RootTabScreenProps<"Chats">) {
-  var socket = io(host);
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+export default function ChatScreen() {
+  const navigation = useNavigation();
   const [chatRooms, setChatRooms] = useState();
-  const [a, setA] = useState([]);
-  const [socketConnected, setSocketConnected] = useState(false);
-  let STORAGE_KEY = "@user_input";
-  let STORAGE_KEY2 = "@chatID";
-  useEffect(() => {
-    socket.on("connected", () => setSocketConnected(true)); // client nhận được rồi mơi save dô client
-  }, []);
 
+  let STORAGE_KEY = "@user_input";
+  let STORAGE_KEY1 = "@user";
+  let STORAGE_KEY2 = "@user_id";
+  let STORAGE_KEY3 = "@NameTap";
   useEffect(() => {
     const abcd = async () => {
       try {
+        const id = AsyncStorage.getItem(STORAGE_KEY2);
         const token = await AsyncStorage.getItem(STORAGE_KEY);
-        const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
+        // const user = await AsyncStorage.getItem(STORAGE_KEY3);
+        // console.log("user in chatScreen: ", user);
+        // // socket.emit("setup", user);
+        // const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
         const config = {
           headers: {
             "Content-type": "application/json",
@@ -35,12 +35,12 @@ export default function ChatScreen({
         const { data } = await axios.get(getChatRom, config);
         // console.log("Chatscreen", data);
         setChatRooms(data);
-        socket.emit("join chat", chatID2);
+        // console.log("user data:  ", data);
+        // socket.emit("join chat", chatID2);
       } catch (e) {
         console.log(e);
       }
     };
-
     abcd();
   }, []);
 

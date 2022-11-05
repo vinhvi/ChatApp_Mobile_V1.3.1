@@ -4,7 +4,6 @@ import { Text, View } from "react-native";
 import moment from "moment";
 import style from "../ChatMessage/style";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import io from "socket.io-client";
 
 export type ChatMessageProps = {
   message: Message;
@@ -12,7 +11,6 @@ export type ChatMessageProps = {
 
 const ChatMessage = (props: ChatMessageProps) => {
   let STORAGE_KEY2 = "@user_id";
-  var socket, selectedChatCompare;
   const { message } = props;
   // console.log(message.sender._id);
   const [userID, setUserID] = useState("");
