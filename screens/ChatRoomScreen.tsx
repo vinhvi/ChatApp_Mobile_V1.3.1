@@ -51,7 +51,7 @@ const ChatRoomScreen = () => {
         config
       );
       setMessage(data);
-      socket.emit("join chat", chatID2);
+      // socket.emit("join chat", chatID2);
     } catch (e) {
       console.log(e);
     }

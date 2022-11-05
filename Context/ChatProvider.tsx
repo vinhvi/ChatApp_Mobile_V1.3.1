@@ -1,16 +1,17 @@
 // import React, { createContext, useContext, useEffect, useState } from "react";
 // // import { useHistory } from "react-router-dom";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { User } from "../types";
 
-// const ChatContext = createContext<String | null>(null);
+// const ChatContext = createContext<User | null>(null);
 // // contextAPI: qly state of our app -> fetch state directly from 1 place
 // // truy cập accessAPI mọi nơi
 // const ChatProvider = (data: any) => {
 //   let STORAGE_KEY = "@user";
-//   const [selectedChat, setSelectedChat] = useState();
-//   const [user, setUser] = useState();
-//   const [notification, setNotification] = useState([]);
-//   const [chats, setChats] = useState([]);
+//   const [userId, setUserId] = useState("");
+//   const [userToken, setUserToken] = useState("");
+//   const [avatar, setAvatar] = useState("");
+//   //   const [chats, setChats] = useState([]);
 
 //   //   const history = useHistory();
 
@@ -18,7 +19,10 @@
 //     const setItem = async () => {
 //       try {
 //         const userInfor = await AsyncStorage.getItem(STORAGE_KEY);
-//         return userInfor != null ? JSON.parse(userInfor) : null;
+//         const a = JSON.parse(userInfor);
+//         setUserId(a._id);
+//         setUserToken(a.token);
+//         setAvatar(a.pic);
 //       } catch (error) {
 //         console.log("Lỗi get user!! ", error);
 //       }
@@ -32,14 +36,9 @@
 //   return (
 //     <ChatContext.Provider
 //       value={{
-//         user,
-//         setUser,
-//         selectedChat,
-//         setSelectedChat,
-//         notification,
-//         setNotification,
-//         chats,
-//         setChats,
+//         _id: userId,
+//         pic: avatar,
+//         name: userToken,
 //       }}
 //     >
 //       {data}

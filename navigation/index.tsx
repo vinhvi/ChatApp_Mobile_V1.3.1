@@ -13,7 +13,12 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, TouchableNativeFeedback, View } from "react-native";
+import {
+  ColorSchemeName,
+  Image,
+  TouchableNativeFeedback,
+  View,
+} from "react-native";
 import { Octicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -58,10 +63,15 @@ function RootNavigator() {
     navigation.navigate("LogOut");
   };
   let STORAGE_KEY = "@user_input";
+  let STORAGE_KEY1 = "@user";
   const [login, setLogin] = useState(false);
+  const [avatar, setAvatar] = useState("");
   const keepLogin = async () => {
     try {
+      const user = await AsyncStorage.getItem(STORAGE_KEY1);
       const data = await AsyncStorage.getItem(STORAGE_KEY);
+      const user1 = JSON.parse(user);
+      setAvatar(user1.pic);
       setLogin(data);
     } catch (error) {}
   };
@@ -104,7 +114,15 @@ function RootNavigator() {
                 }}
               >
                 <TouchableNativeFeedback onPress={dangXuat}>
-                  <FontAwesome name="user-circle-o" size={30} color="white" />
+                  <Image
+                    source={{ uri: avatar }}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 40,
+                      marginRight: 10,
+                    }}
+                  />
                 </TouchableNativeFeedback>
                 <Text
                   style={{ color: "white", fontWeight: "bold", fontSize: 20 }}
@@ -149,7 +167,15 @@ function RootNavigator() {
               }}
             >
               <TouchableNativeFeedback onPress={dangXuat}>
-                <FontAwesome name="user-circle-o" size={30} color="white" />
+                <Image
+                  source={{ uri: avatar }}
+                  style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: 50,
+                    marginRight: 10,
+                  }}
+                />
               </TouchableNativeFeedback>
               <Text
                 style={{ color: "white", fontWeight: "bold", fontSize: 20 }}
@@ -180,7 +206,11 @@ function RootNavigator() {
         options={{ title: "Create Group Chat New!!" }}
       />
 
-      <Stack.Screen name="LogOut" component={Logout} options={{ title: "" }} />
+      <Stack.Screen
+        name="LogOut"
+        component={Logout}
+        options={{ title: "Thông tin" }}
+      />
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}

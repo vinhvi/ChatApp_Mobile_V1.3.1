@@ -1,14 +1,13 @@
-import { BackHandler, FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import ChatListItem from "../components/ChatListItem";
 import { View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import io from "socket.io-client";
 import { getChatRom, host } from "../src/API";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { io } from "socket.io-client";
 export default function ChatScreen() {
   const navigation = useNavigation();
   const [chatRooms, setChatRooms] = useState();
@@ -16,16 +15,18 @@ export default function ChatScreen() {
   let STORAGE_KEY = "@user_input";
   let STORAGE_KEY1 = "@user";
   let STORAGE_KEY2 = "@user_id";
-  let STORAGE_KEY3 = "@NameTap";
+
   useEffect(() => {
     const abcd = async () => {
+      const socket = io(host);
       try {
-        const id = AsyncStorage.getItem(STORAGE_KEY2);
+        // const id = AsyncStorage.getItem(STORAGE_KEY2);
         const token = await AsyncStorage.getItem(STORAGE_KEY);
-        // const user = await AsyncStorage.getItem(STORAGE_KEY3);
-        // console.log("user in chatScreen: ", user);
-        // // socket.emit("setup", user);
-        // const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
+        // const user = await AsyncStorage.getItem(STORAGE_KEY1);
+        // console.log("user in chatScreen: ", JSON.parse(user));
+        // const user2 = JSON.parse(user);
+        // console.log(user2.pic);
+        const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
         const config = {
           headers: {
             "Content-type": "application/json",
@@ -36,7 +37,7 @@ export default function ChatScreen() {
         // console.log("Chatscreen", data);
         setChatRooms(data);
         // console.log("user data:  ", data);
-        // socket.emit("join chat", chatID2);
+        socket.emit("join chat", chatID2);
       } catch (e) {
         console.log(e);
       }
