@@ -31,6 +31,7 @@ const style = StyleSheet.create({
     time: {
         fontSize: 14,
         color: 'gray',
+       
     }
 });
 export default style;

@@ -22,6 +22,8 @@ export default function ChatScreen() {
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
       // console.log("user in chatScreen: ", JSON.parse(user));
       const user2 = JSON.parse(user);
+      // console.log("token user login: ", user2.token);
+
       // console.log(user2.pic);
       // const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
       const config = {
