@@ -18,18 +18,19 @@ import { host } from "../src/API";
 export default function CreateGroupChat() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  let STORAGE_KEY = "@user_input";
+  let STORAGE_KEY = "@user";
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const navigation = useNavigation();
   let STORAGE_KEY1 = "@chatID";
   const timkiem = async () => {
     try {
-      const token = await AsyncStorage.getItem(STORAGE_KEY);
+      const a = await AsyncStorage.getItem(STORAGE_KEY);
+      const b = JSON.parse(a);
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + b.token,
         },
       };
       const { data } = await axios.get(

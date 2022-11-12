@@ -9,15 +9,16 @@ import { getAllUserRoute } from "../src/API";
 export default function ContactsScreen() {
   // const { user } = ChatState();
   const [users, setUsers] = useState([]);
-  let STORAGE_KEY = "@user_input";
+  let STORAGE_KEY = "@user";
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = await AsyncStorage.getItem(STORAGE_KEY);
+        const a = await AsyncStorage.getItem(STORAGE_KEY);
+        const b = JSON.parse(a);
         const config = {
           headers: {
             "Content-type": "application/json",
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + b.token,
           },
         };
         const usersData = await axios.get(getAllUserRoute, config);
@@ -33,7 +34,7 @@ export default function ContactsScreen() {
       <FlatList
         style={{ width: "100%" }}
         data={users}
-        renderItem={({ item }) => <ContactListItem user={item} />}
+        renderItem={({ item }) => <ContactListItem user={item} key={item.id} />}
         // keyExtractor={(item) => item.id}
       />
     </View>

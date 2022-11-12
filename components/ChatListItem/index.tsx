@@ -14,6 +14,7 @@ const ChatListItem = (props: ChatRoomProps) => {
   const idChat = chatRoom._id;
   const [arrayId, setarrId] = useState([]);
   let STORAGE_KEY = "@chatID";
+  let STORAGE_KEY1 = "@userChat";
   const [chatName1, setChatName] = useState("");
   const [time, setTime] = useState("");
 
@@ -23,6 +24,7 @@ const ChatListItem = (props: ChatRoomProps) => {
   const onclick = async () => {
     navigation.navigate("ChatRoom", { name: chatName1, image: user.pic });
     try {
+      await AsyncStorage.setItem(STORAGE_KEY1, JSON.stringify(user));
       await AsyncStorage.setItem(STORAGE_KEY, idChat);
     } catch (error) {
       console.log(error);
@@ -49,7 +51,7 @@ const ChatListItem = (props: ChatRoomProps) => {
     };
     setName();
     check();
-  }, []);
+  }, [navigation]);
 
   return (
     <TouchableNativeFeedback onPress={onclick}>

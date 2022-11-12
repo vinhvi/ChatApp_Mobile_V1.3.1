@@ -7,8 +7,9 @@ const styles = StyleSheet.create({
     messageBox: {
         backgroundColor: 'gray',
         marginRight: 50,
-        borderRadius: 5,
-        padding: 10,
+        borderRadius: 20,
+        padding: 5,
+    
     },
     name: {
         color: Colors.light.tint,
@@ -17,7 +18,6 @@ const styles = StyleSheet.create({
     },
     message: {
         padding:10,
-        
     },
     time: {
         alignSelf: 'flex-end',

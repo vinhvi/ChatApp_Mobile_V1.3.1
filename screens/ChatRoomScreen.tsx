@@ -11,7 +11,7 @@ import BG from "./../assets/images/BG.png";
 import React, { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { host, sendMessage1 } from "../src/API";
 import {
   AntDesign,
@@ -21,6 +21,10 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
+import { useNavigation } from "@react-navigation/native";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
+
+var socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 const ChatRoomScreen = () => {
   const scrollViewRef = useRef();
@@ -28,22 +32,21 @@ const ChatRoomScreen = () => {
   const [token1, setToken1] = useState("");
   const [chatID, setChatID] = useState("");
   const [messages, setMessage] = useState([]);
-  let STORAGE_KEY = "@user_input";
+  const navigation = useNavigation();
   let STORAGE_KEY1 = "@user";
   let STORAGE_KEY2 = "@chatID";
-
   const getMessage = async (socket: any) => {
     try {
-      const token = await AsyncStorage.getItem(STORAGE_KEY);
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
-      socket.emit("setup", user);
-      setToken1(token);
+      const a = JSON.parse(user);
+      socket.emit("setup", a);
+      setToken1(a.token);
       const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
       setChatID(chatID2);
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + a.token,
         },
       };
       const { data } = await axios.get(
@@ -51,32 +54,61 @@ const ChatRoomScreen = () => {
         config
       );
       setMessage(data);
-      // socket.emit("join chat", chatID2);
+      socket.emit("join chat", chatID2);
     } catch (e) {
       console.log(e);
     }
   };
   useEffect(() => {
-    const socket = io(host);
-    getMessage(socket);
+    socket = io(host);
+    const unsubscribe = navigation.addListener("focus", () => {
+      getMessage(socket);
+    });
+    return unsubscribe;
+  }, [navigation || messages]);
+
+  useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
+      console.log("chat id ne: ", chatID);
+
       if (
         !chatID || // if chat is not selected or doesn't match current chat
         chatID !== newMessageRecieved.chat._id
       ) {
-        console.log("iffffffff");
+        console.log("dell nhan dc");
         // if (!notification.includes(newMessageRecieved)) {
         //   // set notification
         //   setNotification([newMessageRecieved, ...notification]);
         //   setFetchAgain(!fetchAgain);
         // }
       } else {
-        console.log("id cua phong chat: ", chatID);
-        console.log("ChatRoomScreen: ", newMessageRecieved);
+        // console.log("id cua phong chat: ", chatID);
+        // console.log("ChatRoomScreen: ", newMessageRecieved);
         setMessage([...messages, newMessageRecieved]);
       }
     });
   }, [messages]);
+  // useEffect(() => {
+  //   const socket = io(host);
+  //   getMessage(socket);
+  //   socket.on("message recieved", (newMessageRecieved) => {
+  //     if (
+  //       !chatID || // if chat is not selected or doesn't match current chat
+  //       chatID !== newMessageRecieved.chat._id
+  //     ) {
+  //       console.log("iffffffff");
+  //       // if (!notification.includes(newMessageRecieved)) {
+  //       //   // set notification
+  //       //   setNotification([newMessageRecieved, ...notification]);
+  //       //   setFetchAgain(!fetchAgain);
+  //       // }
+  //     } else {
+  //       console.log("id cua phong chat: ", chatID);
+  //       console.log("ChatRoomScreen: ", newMessageRecieved);
+  //       setMessage([...messages, newMessageRecieved]);
+  //     }
+  //   });
+  // }, [messages]);
 
   const onMicroPhone = () => {
     console.warn("on the microphone for you !!");
@@ -99,7 +131,7 @@ const ChatRoomScreen = () => {
         },
         config
       );
-      console.log("data chatROom", data);
+      // console.log("data chatROom", data);
       socket.emit("new message", data);
       setMessage([...messages, data]);
       setNewMessages("");
@@ -123,9 +155,10 @@ const ChatRoomScreen = () => {
         onContentSizeChange={() =>
           scrollViewRef.current.scrollToEnd({ animated: true })
         }
-        // ListFooterComponent={({ item }) => <ChatMessage message={item} />}
         data={messages}
-        renderItem={({ item }) => <ChatMessage message={item} />}
+        renderItem={({ item }) => (
+          <ChatMessage messages={messages} message={item} />
+        )}
       />
       <View style={styles.container}>
         <View style={styles.mainContainer}>

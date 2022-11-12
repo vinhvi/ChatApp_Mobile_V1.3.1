@@ -35,6 +35,7 @@ import CreateGroupChat from "../screens/CreateGroupChat";
 import { useEffect, useState } from "react";
 import { Text } from "../components/Themed";
 import Logout from "../screens/DX";
+import UserInfor from "../screens/UserInfor";
 
 export default function Navigation({
   colorScheme,
@@ -62,18 +63,22 @@ function RootNavigator() {
   const dangXuat = () => {
     navigation.navigate("LogOut");
   };
-  let STORAGE_KEY = "@user_input";
   let STORAGE_KEY1 = "@user";
   const [login, setLogin] = useState(false);
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState();
   const keepLogin = async () => {
     try {
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
-      const data = await AsyncStorage.getItem(STORAGE_KEY);
       const user1 = JSON.parse(user);
-      setAvatar(user1.pic);
-      setLogin(data);
-    } catch (error) {}
+      if (user === null) {
+        setLogin(false);
+      } else {
+        await setAvatar(user1.pic);
+        setLogin(true);
+      }
+    } catch (error) {
+      console.log("Lỗi loading in index(navigation)", error);
+    }
   };
   useEffect(() => {
     keepLogin();
@@ -201,6 +206,11 @@ function RootNavigator() {
         options={{ title: "Đăng Nhập" }}
       />
       <Stack.Screen
+        name="UserInfor"
+        component={UserInfor}
+        options={{ title: "Thông tin người dùng" }}
+      />
+      <Stack.Screen
         name="CreateGroupChat"
         component={CreateGroupChat}
         options={{ title: "Create Group Chat New!!" }}
@@ -209,7 +219,7 @@ function RootNavigator() {
       <Stack.Screen
         name="LogOut"
         component={Logout}
-        options={{ title: "Thông tin" }}
+        options={{ title: "Thông tin tài khoản" }}
       />
       <Stack.Screen
         name="ChatRoom"

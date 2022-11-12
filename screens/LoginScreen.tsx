@@ -22,8 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  let STORAGE_KEY = "@user_input";
-  let STORAGE_KEY2 = "@user_id";
+
   let STORAGE_KEY3 = "@user";
 
   const onSignInPressed = async (data: any) => {
@@ -44,12 +43,7 @@ export default function LoginScreen() {
       console.log(a.data.token);
       const user = JSON.stringify(a.data);
       try {
-        await AsyncStorage.setItem(STORAGE_KEY, a.data.token);
         await AsyncStorage.setItem(STORAGE_KEY3, user);
-        await AsyncStorage.setItem("keepLogin", JSON.stringify(true));
-        // console.log("user: ", user);
-
-        await AsyncStorage.setItem(STORAGE_KEY2, a.data._id);
       } catch (err) {
         console.log(err);
       }

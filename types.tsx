@@ -21,6 +21,7 @@ export type RootStackParamList = {
   Contact: undefined;
   CreateGroupChat: undefined;
   LogOut: undefined;
+  UserInfor: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

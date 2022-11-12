@@ -24,6 +24,7 @@ export default function SignUpScreen() {
   const [uriImage, setUriImage] = useState(
     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
   );
+  const [image1, setImage1] = useState(null);
   const {
     control,
     handleSubmit,
@@ -42,18 +43,31 @@ export default function SignUpScreen() {
       quality: 1,
     });
     if (!result.cancelled) {
+      // let image = {
+      //   uri: result.uri,
+      //   type: `test/${result.uri.split(".")[1]}`,
+      //   name: `test.${result.uri.split(".")[1]}`,
+      // };
       setUriImage(result.uri);
-      uploadphoto(uriImage);
+      setImage1(result);
+      console.log(image1);
+    } else {
+      alert("ko load dc anh ");
     }
   };
-  const uploadphoto = (uri: any) => {
+  const uploadphoto = (result: any) => {
+    let image = {
+      uri: result.uri,
+      type: `test/${result.uri.split(".")[1]}`,
+      name: `test.${result.uri.split(".")[1]}`,
+    };
     if (loading) {
       return;
     }
     setLoading(true);
 
     const data = new FormData();
-    data.append("file", uri);
+    data.append("file", image);
     data.append("upload_preset", "MongoChat04");
     data.append("cloud_name", "dfgkg5eej");
     fetch("https://api.cloudinary.com/v1_1/dfgkg5eej/image/upload", {
@@ -62,15 +76,16 @@ export default function SignUpScreen() {
     })
       .then((res) => res.json())
       .then((data) => {
-        Alert.alert("Thành Công!!", "Đã upload ảnh");
-        setLoading(false);
+        console.log("image uri", data);
+
+        // Alert.alert("Thành Công!!", "Đã upload ảnh");
+        // setLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
       });
   };
-
   const onSignUpressed = async (data: any) => {
     if (loading) {
       return;
@@ -95,6 +110,7 @@ export default function SignUpScreen() {
         { name, email, password, uriImage },
         config
       );
+      await uploadphoto(image1);
       Alert.alert("Đăng ký thành công!!");
       navigation.navigate("Login");
     } catch (errors) {
@@ -123,6 +139,7 @@ export default function SignUpScreen() {
           </View>
         </TouchableOpacity>
       </View>
+
       <CustomInput
         name="name"
         placeholder="Nhập Name"

@@ -2,34 +2,44 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
+import { io } from "socket.io-client";
+import { host } from "../src/API";
 
 const Logout = () => {
+  let STORAGE_KEY1 = "@user";
+  const [avatar, setAvatar] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState();
   const navigation = useNavigation();
+  const getItem = async () => {
+    try {
+      const user = await AsyncStorage.getItem(STORAGE_KEY1);
+      const user1 = JSON.parse(user);
+      setAvatar(user1.pic);
+      setName(user1.name);
+      setEmail(user1.email);
+    } catch (error) {
+      console.log("Lỗi khi get thông tin user tại DX ", error);
+    }
+  };
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getItem();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const logoutUser = async () => {
     try {
-      await AsyncStorage.clear();
+      await AsyncStorage.removeItem(STORAGE_KEY1);
+      await AsyncStorage.removeItem("@chatID");
+      await AsyncStorage.removeItem("@userInfor");
       navigation.navigate("Login1");
     } catch (error) {
       console.log("Lỗi Đăng xuất ", error);
     }
   };
-  let STORAGE_KEY1 = "@user";
-  const [avatar, setAvatar] = useState();
-  const [name, setName] = useState("");
-
-  useEffect(() => {
-    const getItem = async () => {
-      try {
-        const user = await AsyncStorage.getItem(STORAGE_KEY1);
-        const user1 = JSON.parse(user);
-        setAvatar(user1.pic);
-        setName(user1.name);
-      } catch (error) {
-        console.log("Lỗi khi get thông tin user tại DX ", error);
-      }
-    };
-    getItem();
-  });
 
   return (
     <View
@@ -50,8 +60,9 @@ const Logout = () => {
           }}
         />
       </View>
-      <View style={{ marginTop: 10, marginBottom: 10 }}>
+      <View style={{ marginTop: 10, marginBottom: 10, alignItems: "center" }}>
         <Text style={{ fontWeight: "bold", fontSize: 20 }}>{name}</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{email}</Text>
       </View>
       <View
         style={{
