@@ -22,6 +22,8 @@ export type RootStackParamList = {
   CreateGroupChat: undefined;
   LogOut: undefined;
   UserInfor: undefined;
+  InforUserChat: undefined;
+  UpdateProfile: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

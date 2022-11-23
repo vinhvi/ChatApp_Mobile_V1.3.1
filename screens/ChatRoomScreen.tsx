@@ -35,18 +35,20 @@ const ChatRoomScreen = () => {
   const navigation = useNavigation();
   let STORAGE_KEY1 = "@user";
   let STORAGE_KEY2 = "@chatID";
+  let STORAGE_KEY3 = "@token";
   const getMessage = async (socket: any) => {
     try {
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
       const a = JSON.parse(user);
       socket.emit("setup", a);
-      setToken1(a.token);
+      const user_token = await AsyncStorage.getItem(STORAGE_KEY3);
+      setToken1(user_token);
       const chatID2 = await AsyncStorage.getItem(STORAGE_KEY2);
       setChatID(chatID2);
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: "Bearer " + a.token,
+          Authorization: "Bearer " + user_token,
         },
       };
       const { data } = await axios.get(

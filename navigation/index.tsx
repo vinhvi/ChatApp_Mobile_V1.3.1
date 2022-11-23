@@ -17,6 +17,7 @@ import {
   ColorSchemeName,
   Image,
   TouchableNativeFeedback,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { Octicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -36,6 +37,8 @@ import { useEffect, useState } from "react";
 import { Text } from "../components/Themed";
 import Logout from "../screens/DX";
 import UserInfor from "../screens/UserInfor";
+import InforUserChat from "../screens/InforUserChatScreen";
+import updateProfile from "../screens/UpdateProfileScreen";
 
 export default function Navigation({
   colorScheme,
@@ -62,6 +65,9 @@ function RootNavigator() {
   const navigation = useNavigation();
   const dangXuat = () => {
     navigation.navigate("LogOut");
+  };
+  const inforUserChat = () => {
+    navigation.navigate("InforUserChat");
   };
   let STORAGE_KEY1 = "@user";
   const [login, setLogin] = useState(false);
@@ -156,6 +162,7 @@ function RootNavigator() {
           headerLeft: () => <View></View>,
         })}
       />
+
       <Stack.Screen
         name="Root1"
         component={BottomTabNavigator}
@@ -206,6 +213,11 @@ function RootNavigator() {
         options={{ title: "Đăng Nhập" }}
       />
       <Stack.Screen
+        name="UpdateProfile"
+        component={updateProfile}
+        options={{ title: "Sửa Thông Tin" }}
+      />
+      <Stack.Screen
         name="UserInfor"
         component={UserInfor}
         options={{ title: "Thông tin người dùng" }}
@@ -236,16 +248,49 @@ function RootNavigator() {
                 marginRight: 10,
               }}
             >
-              <FontAwesome name="video-camera" size={24} color={"white"} />
-              <MaterialIcons name="call" size={24} color={"white"} />
-              <MaterialCommunityIcons
-                name="dots-vertical"
+              {/* <TouchableOpacity onPress={inforUserChat}>
+                <Text
+                  style={{ color: "white", fontWeight: "bold", fontSize: 20 }}
+                >
+                  {route.params.name}
+                </Text>
+              </TouchableOpacity> */}
+              {/* <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  marginLeft: 120,
+                }}
+              > */}
+              <FontAwesome
+                name="video-camera"
                 size={24}
                 color={"white"}
+                // style={{ marginLeft: 30 }}
               />
+              <MaterialIcons
+                name="call"
+                size={24}
+                color={"white"}
+                // style={{ marginLeft: 40 }}
+              />
+              <TouchableOpacity onPress={inforUserChat}>
+                <MaterialCommunityIcons
+                  name="dots-vertical"
+                  size={24}
+                  color={"white"}
+                  // style={{ marginLeft: 20 }}
+                />
+              </TouchableOpacity>
+              {/* </View> */}
             </View>
           ),
         })}
+      />
+      <Stack.Screen
+        name="InforUserChat"
+        component={InforUserChat}
+        options={{ title: "Tùy Chọn" }}
       />
     </Stack.Navigator>
   );

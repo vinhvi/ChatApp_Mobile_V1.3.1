@@ -24,6 +24,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
 
   let STORAGE_KEY3 = "@user";
+  let STORAGE_KEY2 = "@token";
 
   const onSignInPressed = async (data: any) => {
     if (loading) {
@@ -44,6 +45,7 @@ export default function LoginScreen() {
       const user = JSON.stringify(a.data);
       try {
         await AsyncStorage.setItem(STORAGE_KEY3, user);
+        await AsyncStorage.setItem(STORAGE_KEY2, a.data.token);
       } catch (err) {
         console.log(err);
       }

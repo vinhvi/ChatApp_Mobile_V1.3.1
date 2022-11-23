@@ -9,16 +9,15 @@ import { getAllUserRoute } from "../src/API";
 export default function ContactsScreen() {
   // const { user } = ChatState();
   const [users, setUsers] = useState([]);
-  let STORAGE_KEY = "@user";
+  let STORAGE_KEY = "@token";
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const a = await AsyncStorage.getItem(STORAGE_KEY);
-        const b = JSON.parse(a);
         const config = {
           headers: {
             "Content-type": "application/json",
-            Authorization: "Bearer " + b.token,
+            Authorization: "Bearer " + a,
           },
         };
         const usersData = await axios.get(getAllUserRoute, config);

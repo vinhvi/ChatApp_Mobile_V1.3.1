@@ -18,7 +18,7 @@ import { host } from "../src/API";
 export default function CreateGroupChat() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  let STORAGE_KEY = "@user";
+  let STORAGE_KEY = "@token";
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const navigation = useNavigation();
@@ -26,11 +26,10 @@ export default function CreateGroupChat() {
   const timkiem = async () => {
     try {
       const a = await AsyncStorage.getItem(STORAGE_KEY);
-      const b = JSON.parse(a);
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: "Bearer " + b.token,
+          Authorization: "Bearer " + a,
         },
       };
       const { data } = await axios.get(

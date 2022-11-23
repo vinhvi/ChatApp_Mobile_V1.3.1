@@ -12,13 +12,13 @@ export default function ChatScreen() {
   const navigation = useNavigation();
   const [chatRooms, setChatRooms] = useState();
   const [socketConnected, setSocketConnected] = useState(false);
-
+  let STORAGE_KEY3 = "@token";
   let STORAGE_KEY1 = "@user";
   const abcd = async () => {
     // const socket = io(host);
     try {
       // const id = AsyncStorage.getItem(STORAGE_KEY2);
-      // const token = await AsyncStorage.getItem(STORAGE_KEY);
+      const user_token = await AsyncStorage.getItem(STORAGE_KEY3);
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
       // console.log("user in chatScreen: ", JSON.parse(user));
       const user2 = JSON.parse(user);
@@ -29,7 +29,7 @@ export default function ChatScreen() {
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: "Bearer " + user2.token,
+          Authorization: "Bearer " + user_token,
         },
       };
       const { data } = await axios.get(getChatRom, config);

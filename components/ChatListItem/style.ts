@@ -19,6 +19,14 @@ const style = StyleSheet.create({
         borderRadius: 50,
         marginRight: 10,
     },
+    avatar2: {
+          alignItems:'center',
+        width: 60,
+          height: 60,
+        borderWidth:1,
+        borderRadius: 50,
+        marginRight: 10,
+    },
     username: {
         fontWeight: 'bold',
         fontSize: 17,

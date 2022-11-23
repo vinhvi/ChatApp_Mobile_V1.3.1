@@ -2,8 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
-import { io } from "socket.io-client";
-import { host } from "../src/API";
 
 const Logout = () => {
   let STORAGE_KEY1 = "@user";
@@ -40,6 +38,9 @@ const Logout = () => {
       console.log("Lỗi Đăng xuất ", error);
     }
   };
+  const updateProfile = () => {
+    navigation.navigate("UpdateProfile");
+  };
 
   return (
     <View
@@ -68,9 +69,25 @@ const Logout = () => {
         style={{
           borderRadius: 10,
           borderWidth: 1,
+
+          width: 150,
+          alignItems: "center",
+        }}
+      >
+        <TouchableOpacity onPress={updateProfile}>
+          <Text style={{ color: "black", fontWeight: "bold" }}>
+            Sửa thông tin
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          borderRadius: 10,
+          borderWidth: 1,
           backgroundColor: "red",
           width: 100,
           alignItems: "center",
+          marginTop: 10,
         }}
       >
         <TouchableOpacity onPress={logoutUser}>

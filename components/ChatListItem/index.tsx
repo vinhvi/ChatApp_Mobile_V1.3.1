@@ -23,6 +23,7 @@ const ChatListItem = (props: ChatRoomProps) => {
   const user = chatRoom.users[1];
   const user1 = chatRoom.users[0];
   const [isCheck, setIsCheck] = useState(false);
+  const [isCheckG, setIsCheckG] = useState(false);
   const onclick = async () => {
     navigation.navigate("ChatRoom", { name: chatName1, image: avatar });
     try {
@@ -44,6 +45,7 @@ const ChatListItem = (props: ChatRoomProps) => {
           setAvatar(user1.pic);
           setIsCheck(true);
         } else {
+          setIsCheckG(true);
           setChatName(chatRoom.chatName.toString());
         }
       } else {
@@ -67,6 +69,7 @@ const ChatListItem = (props: ChatRoomProps) => {
       setChatName(user.name);
       setAvatar(user.pic);
     } else {
+      setIsCheckG(true);
       setChatName(chatRoom.chatName.toString());
     }
   };
@@ -79,7 +82,15 @@ const ChatListItem = (props: ChatRoomProps) => {
     <TouchableNativeFeedback onPress={onclick}>
       <View style={style.container}>
         <View style={style.leftContainer}>
-          <Image source={{ uri: avatar }} style={style.avatar} />
+          {!isCheckG ? (
+            <Image source={{ uri: avatar }} style={style.avatar} />
+          ) : (
+            <Image
+              source={require("../ChatListItem/icon_group.jpg")}
+              style={style.avatar}
+            />
+          )}
+
           <View style={style.midContainer}>
             <Text style={style.username}>{chatName1}</Text>
             <Text numberOfLines={2} style={style.lastMessage}>
