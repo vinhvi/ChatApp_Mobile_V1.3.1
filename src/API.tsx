@@ -5,3 +5,4 @@ export const getAllUserRoute = `${host}/api/user/`;
 export const getChatRom = `${host}/api/chat`;
 export const sendMessage1 = `${host}/api/message`;
 export const checkChat = `${host}/api/chat/mobile`;
+export const updateUserInfor = `${host}/api/user/updateProfile`;

@@ -8,6 +8,7 @@ import {
   Image,
   ImagePickerIOS,
 } from "react-native";
+import { RadioButton } from "react-native-paper";
 import React, { Component, useState } from "react";
 import { useForm } from "react-hook-form";
 import CustomInput from "../components/CustomTextinput/CustomTextInput";
@@ -24,12 +25,16 @@ export default function SignUpScreen() {
   const [uriImage, setUriImage] = useState(
     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
   );
+
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [sex, setSex] = useState();
+  const [date, setDate] = useState();
+  const [phone, setPhone] = useState();
+  const [password, setPassword] = useState();
+  const [password2, setPassword2] = useState();
+  const [checked, setChecked] = useState("first");
   const [image1, setImage1] = useState(null);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
   const onSignUpPress = () => {
     navigation.navigate("Login");
@@ -50,7 +55,6 @@ export default function SignUpScreen() {
       // };
       setUriImage(result.uri);
       setImage1(result);
-      console.log(image1);
     } else {
       alert("ko load dc anh ");
     }
@@ -86,14 +90,31 @@ export default function SignUpScreen() {
         setLoading(false);
       });
   };
-  const onSignUpressed = async (data: any) => {
+  const checkSex = () => {
+    if (checked === "second") {
+      setSex(2);
+    } else if (checked === "three") {
+      setSex(3);
+    } else {
+      setSex(1);
+    }
+  };
+  const onSignUpressed = async () => {
+    // console.log(
+    //   "data push for server: " +
+    //     name +
+    //     email +
+    //     phone +
+    //     password +
+    //     uriImage +
+    //     date +
+    //     "\n" +
+    //     sex
+    // );
+
     if (loading) {
       return;
     }
-    const name = data.name;
-    const email = data.email;
-    const password = data.password;
-    const password2 = data.password2;
     if (password != password2) {
       Alert.alert("Lỗi password nhập lại không khớp ");
       return;
@@ -105,9 +126,12 @@ export default function SignUpScreen() {
           "Content-type": "application/json",
         },
       };
+      await checkSex();
+      const birth = date;
+      const pic = uriImage;
       await axios.post(
         singupRoute,
-        { name, email, password, uriImage },
+        { name, email, phone, password, pic, birth, sex },
         config
       );
       await uploadphoto(image1);
@@ -139,54 +163,87 @@ export default function SignUpScreen() {
           </View>
         </TouchableOpacity>
       </View>
-
-      <CustomInput
-        name="name"
-        placeholder="Nhập Name"
-        control={control}
-        rules={{ required: "Name không được trống" }}
-        secureTextEntry={undefined}
-      />
-      <CustomInput
-        name="email"
-        placeholder="Nhập Email"
-        control={control}
-        rules={{ required: "Email không được trống" }}
-        secureTextEntry={undefined}
-      />
-      <CustomInput
-        name="password"
-        placeholder="Nhập password"
-        secureTextEntry
-        control={control}
-        rules={{
-          required: "Password trống",
-          minLength: {
-            value: 3,
-            message: "Password phải có 8 ký tự",
-          },
-        }}
-      />
-      <CustomInput
-        name="password2"
-        placeholder="Nhập lại password"
-        secureTextEntry
-        control={control}
-        rules={{
-          required: "Password trống",
-          minLength: {
-            value: 3,
-            message: "Password phải có 8 ký tự",
-          },
-        }}
-      />
-
-      <CustomButton
-        text={loading ? "Loading..." : "Đăng ký"}
-        onPress={handleSubmit(onSignUpressed)}
-        bgColor={undefined}
-        fgColor={undefined}
-      />
+      <View style={styles.view_textinput}>
+        <TextInput
+          placeholder="Nhập tên "
+          style={styles.textinput}
+          value={name}
+          disableFullscreenUI
+          onChangeText={(e) => setName(e)}
+        />
+      </View>
+      <View style={styles.view_textinput}>
+        <TextInput
+          placeholder="Nhập email "
+          style={styles.textinput}
+          value={email}
+          disableFullscreenUI
+          onChangeText={(e) => setEmail(e)}
+        />
+      </View>
+      <View style={styles.view_textinput}>
+        <TextInput
+          placeholder="Nhập số điện thoại "
+          style={styles.textinput}
+          value={phone}
+          disableFullscreenUI
+          onChangeText={(e) => setPhone(e)}
+        />
+      </View>
+      <RadioButton.Group
+        onValueChange={(newValue) => setChecked(newValue)}
+        value={checked}
+      >
+        <View style={styles.view1_radio}>
+          <View style={styles.view2_radio}>
+            <Text style={{ marginTop: 7 }}>Nam</Text>
+            <RadioButton value="first" />
+            <View style={styles.view2_radio}>
+              <Text style={{ marginTop: 7, marginLeft: 20 }}>Nữ</Text>
+              <RadioButton value="second" />
+            </View>
+            <View style={styles.view2_radio}>
+              <Text style={{ marginTop: 7 }}>Khác</Text>
+              <RadioButton value="three" />
+            </View>
+          </View>
+        </View>
+      </RadioButton.Group>
+      <View style={styles.view_textinput}>
+        <TextInput
+          placeholder="Nhập ngày sinh ( yyyy-
+          mm-dd) "
+          style={styles.textinput}
+          value={date}
+          disableFullscreenUI
+          onChangeText={(e) => setDate(e)}
+        />
+      </View>
+      <View style={styles.view_textinput}>
+        <TextInput
+          placeholder="Nhập mật khẩu "
+          style={styles.textinput}
+          value={password}
+          disableFullscreenUI
+          onChangeText={(e) => setPassword(e)}
+        />
+      </View>
+      <View style={styles.view_textinput}>
+        <TextInput
+          placeholder="Nhập lại mật khẩu "
+          style={styles.textinput}
+          value={password2}
+          disableFullscreenUI
+          onChangeText={(e) => setPassword2(e)}
+        />
+      </View>
+      <TouchableOpacity onPress={onSignUpressed}>
+        <View style={styles.saveinfor}>
+          <Text style={styles.upload1}>
+            {loading ? "Loading..." : "Đăng ký"}
+          </Text>
+        </View>
+      </TouchableOpacity>
       <CustomButton
         text="Bạn đã có tài khoản ? Đăng nhập ?"
         type="TERTIARY"
@@ -201,7 +258,8 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    padding: 20,
+
+    // padding: 20,
   },
   image: {
     width: 150,
@@ -223,5 +281,38 @@ const styles = StyleSheet.create({
   upload: {
     fontWeight: "bold",
     color: "white",
+  },
+  upload1: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+  },
+  view_textinput: {
+    borderRadius: 10,
+    borderWidth: 1,
+    width: 300,
+    marginTop: 5,
+  },
+  textinput: {
+    fontWeight: "bold",
+    fontSize: 15,
+    marginLeft: 10,
+    height: 30,
+  },
+  view1_radio: {
+    flexDirection: "row",
+  },
+  view2_radio: {
+    marginTop: 5,
+    flexDirection: "row",
+    marginLeft: 20,
+  },
+  saveinfor: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 150,
+    alignItems: "center",
+    backgroundColor: "red",
   },
 });
