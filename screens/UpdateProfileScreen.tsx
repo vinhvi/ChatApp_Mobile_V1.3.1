@@ -85,10 +85,8 @@ export default function UpdateProfile() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("image uri", data);
-        console.log(data);
-
-        setUriImage(data);
+        console.log("image uri", data.url);
+        setUriImage(data.url);
         setLoading(false);
       })
       .catch((err) => {
@@ -238,6 +236,7 @@ const styles = StyleSheet.create({
   upload: {
     fontWeight: "bold",
     color: "white",
+    fontSize: 15,
   },
   view_textinput: {
     borderRadius: 10,
@@ -248,7 +247,7 @@ const styles = StyleSheet.create({
   view_text: {
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "blue",
+    borderColor: "#17A589",
     width: 250,
     marginTop: 10,
   },
@@ -262,16 +261,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   view2_radio: {
-    marginTop: 5,
+    marginTop: 0,
     flexDirection: "row",
-    marginLeft: 20,
+    // marginLeft: ,
   },
   saveinfor: {
     marginTop: 10,
     borderWidth: 1,
     borderRadius: 10,
-    width: 150,
+    width: 250,
+    height: 30,
     alignItems: "center",
-    backgroundColor: "red",
+    backgroundColor: "#0E6655",
   },
 });

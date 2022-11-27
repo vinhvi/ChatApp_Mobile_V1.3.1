@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   Alert,
   BackHandler,
+  ImageBackground,
 } from "react-native";
 import { loginRoute } from "../src/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -65,49 +66,54 @@ export default function LoginScreen() {
     navigation.navigate("SignUp");
   };
   return (
-    <View style={styles.root}>
-      <View>
-        <Image
-          style={styles.image}
-          source={require("../assets/images/logo_chatap.png")}
+    <ImageBackground
+      source={require("../assets/images/backgrounChat.jpg")}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <View style={styles.root}>
+        <View>
+          <Image
+            style={styles.image}
+            source={require("../assets/images/Logo.png")}
+          />
+        </View>
+        <CustomInput
+          name="email"
+          placeholder="Nhập Email"
+          control={control}
+          rules={{ required: "Email không được trống" }}
+          secureTextEntry={undefined}
         />
+        <CustomInput
+          name="password"
+          placeholder="Password"
+          secureTextEntry
+          control={control}
+          rules={{
+            required: "Password trống",
+            minLength: {
+              value: 3,
+              message: "Password phải có 8 ký tự",
+            },
+          }}
+        />
+        <CustomButton
+          text={loading ? "Loading..." : "Sign In"}
+          onPress={handleSubmit(onSignInPressed)}
+          bgColor={"#17A589"}
+          fgColor={undefined}
+        />
+        <CustomButton
+          text="Bạn chưa có tài khoản ? Đăng ký tài khoản ?"
+          type="TERTIARY"
+          onPress={onSignUpPress}
+          bgColor={undefined}
+          fgColor={"white"}
+        />
+        {/* Use a light status bar on iOS to account for the black space above the modal */}
+        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       </View>
-      <CustomInput
-        name="email"
-        placeholder="Nhập Email"
-        control={control}
-        rules={{ required: "Email không được trống" }}
-        secureTextEntry={undefined}
-      />
-      <CustomInput
-        name="password"
-        placeholder="Password"
-        secureTextEntry
-        control={control}
-        rules={{
-          required: "Password trống",
-          minLength: {
-            value: 3,
-            message: "Password phải có 8 ký tự",
-          },
-        }}
-      />
-      <CustomButton
-        text={loading ? "Loading..." : "Sign In"}
-        onPress={handleSubmit(onSignInPressed)}
-        bgColor={undefined}
-        fgColor={undefined}
-      />
-      <CustomButton
-        text="Bạn chưa có tài khoản ? Đăng ký tài khoản ?"
-        type="TERTIARY"
-        onPress={onSignUpPress}
-        bgColor={undefined}
-        fgColor={undefined}
-      />
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-    </View>
+    </ImageBackground>
   );
 }
 

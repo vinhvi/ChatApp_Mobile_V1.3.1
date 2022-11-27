@@ -13,10 +13,7 @@ import {
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import React, { Component, useState } from "react";
-import { useForm } from "react-hook-form";
-import CustomInput from "../components/CustomTextinput/CustomTextInput";
 import CustomButton from "../components/CustomButton/CustomButton";
-import navigation from "../navigation";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { singupRoute } from "../src/API";
@@ -84,9 +81,12 @@ export default function SignUpScreen() {
       .then((res) => res.json())
       .then((data) => {
         console.log("image uri", data);
+        //  pic = data.url.toString();
+        setUriImage(data.url);
+        console.log("uri image: " + uriImage);
 
         // Alert.alert("Thành Công!!", "Đã upload ảnh");
-        // setLoading(false);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -103,18 +103,6 @@ export default function SignUpScreen() {
     }
   };
   const onSignUpressed = async () => {
-    // console.log(
-    //   "data push for server: " +
-    //     name +
-    //     email +
-    //     phone +
-    //     password +
-    //     uriImage +
-    //     date +
-    //     "\n" +
-    //     sex
-    // );
-
     if (loading) {
       return;
     }

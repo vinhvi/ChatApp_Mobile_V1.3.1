@@ -23,24 +23,6 @@ const ContactListItem = (props: ContactListItemProps) => {
     // checkID();
     infor();
   };
-  // const checkID = async () => {
-  //   try {
-  //     const token = await AsyncStorage.getItem(STORAGE_KEY);
-  //     const config = {
-  //       headers: {
-  //         "Content-type": "application/json",
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     };
-  //     const { data } = await axios.post(checkChat, { userId: userID }, config);
-  //     setIdChat(data);
-  //     console.log("id chat cua no la: ", idChat);
-  //     await AsyncStorage.setItem(STORAGE_KEY1, idChat);
-  //   } catch (error) {
-  //     console.log("lỗi checkIDChat trong ContactListItem: ", error);
-  //   }
-  // };
-
   const infor = async () => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY1, JSON.stringify(user));

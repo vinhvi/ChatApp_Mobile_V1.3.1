@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from "react-native";
 import ChatMessage from "../components/ChatMessage";
-import BG from "./../assets/images/BG.png";
 import React, { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -78,7 +77,7 @@ const ChatRoomScreen = () => {
         !chatID || // if chat is not selected or doesn't match current chat
         chatID !== newMessageRecieved.chat._id
       ) {
-        console.log("dell nhan dc");
+        console.log("khong nhan dc");
         // if (!notification.includes(newMessageRecieved)) {
         //   // set notification
         //   setNotification([newMessageRecieved, ...notification]);
@@ -91,27 +90,6 @@ const ChatRoomScreen = () => {
       }
     });
   }, [messages]);
-  // useEffect(() => {
-  //   const socket = io(host);
-  //   getMessage(socket);
-  //   socket.on("message recieved", (newMessageRecieved) => {
-  //     if (
-  //       !chatID || // if chat is not selected or doesn't match current chat
-  //       chatID !== newMessageRecieved.chat._id
-  //     ) {
-  //       console.log("iffffffff");
-  //       // if (!notification.includes(newMessageRecieved)) {
-  //       //   // set notification
-  //       //   setNotification([newMessageRecieved, ...notification]);
-  //       //   setFetchAgain(!fetchAgain);
-  //       // }
-  //     } else {
-  //       console.log("id cua phong chat: ", chatID);
-  //       console.log("ChatRoomScreen: ", newMessageRecieved);
-  //       setMessage([...messages, newMessageRecieved]);
-  //     }
-  //   });
-  // }, [messages]);
 
   const onMicroPhone = () => {
     console.warn("on the microphone for you !!");
@@ -152,7 +130,10 @@ const ChatRoomScreen = () => {
   };
 
   return (
-    <ImageBackground source={BG} style={{ width: "100%", height: "100%" }}>
+    <ImageBackground
+      source={require("../assets/images/BG.png")}
+      style={{ width: "100%", height: "100%" }}
+    >
       <FlatList
         ref={scrollViewRef}
         onContentSizeChange={() =>

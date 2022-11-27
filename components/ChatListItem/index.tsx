@@ -15,16 +15,20 @@ const ChatListItem = (props: ChatRoomProps) => {
   let STORAGE_KEY = "@chatID";
   let STORAGE_KEY2 = "@user";
   let STORAGE_KEY1 = "@userChat";
+  let STORAGE_KEY3 = "@nameGroup";
+  let STORAGE_KEY4 = "@countUser";
   const [chatName1, setChatName] = useState("");
   const [time, setTime] = useState("");
   const [avatar, setAvatar] = useState();
   const navigation = useNavigation();
   const [lastMessage, setLastMessage] = useState("");
   const user = chatRoom.users[1];
+  const countUser = chatRoom.users.length;
   const user1 = chatRoom.users[0];
   const [isCheck, setIsCheck] = useState(false);
   const [isCheckG, setIsCheckG] = useState(false);
   const onclick = async () => {
+    checkUeser();
     navigation.navigate("ChatRoom", { name: chatName1, image: avatar });
     try {
       !isCheck
@@ -40,7 +44,7 @@ const ChatListItem = (props: ChatRoomProps) => {
       const a = await AsyncStorage.getItem(STORAGE_KEY2);
       const b = JSON.parse(a);
       if (b._id === user._id) {
-        if (chatRoom.isGroupChat != true) {
+        if (!chatRoom.isGroupChat) {
           setChatName(user1.name);
           setAvatar(user1.pic);
           setIsCheck(true);
@@ -64,13 +68,26 @@ const ChatListItem = (props: ChatRoomProps) => {
       return;
     }
   };
-  const setName = () => {
+  const setName = async () => {
     if (chatRoom.isGroupChat != true) {
       setChatName(user.name);
       setAvatar(user.pic);
+      try {
+        await AsyncStorage.removeItem(STORAGE_KEY3);
+        await AsyncStorage.removeItem(STORAGE_KEY4);
+        // await AsyncStorage.setItem(STORAGE_KEY3, "null");
+      } catch (error) {
+        console.log("error", error);
+      }
     } else {
       setIsCheckG(true);
       setChatName(chatRoom.chatName.toString());
+      try {
+        await AsyncStorage.setItem(STORAGE_KEY3, chatName1);
+        await AsyncStorage.setItem(STORAGE_KEY4, countUser.toString());
+      } catch (error) {
+        console.log("error", error);
+      }
     }
   };
   useEffect(() => {
@@ -90,7 +107,6 @@ const ChatListItem = (props: ChatRoomProps) => {
               style={style.avatar}
             />
           )}
-
           <View style={style.midContainer}>
             <Text style={style.username}>{chatName1}</Text>
             <Text numberOfLines={2} style={style.lastMessage}>

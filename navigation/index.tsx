@@ -79,7 +79,6 @@ function RootNavigator() {
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
       const user1 = JSON.parse(user);
       // console.log("user in system: " + user);
-
       if (user === null) {
         setLogin(false);
       } else {
@@ -121,7 +120,7 @@ function RootNavigator() {
             headerLeft: () => (
               <View
                 style={{
-                  backgroundColor: "#0C6157",
+                  backgroundColor: "#17A589",
                   flexDirection: "row",
                   justifyContent: "space-between",
                   width: "100%",
@@ -175,7 +174,7 @@ function RootNavigator() {
           headerLeft: () => (
             <View
               style={{
-                backgroundColor: "#0C6157",
+                backgroundColor: "#17A589",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "100%",
@@ -245,7 +244,7 @@ function RootNavigator() {
           headerRight: () => (
             <View
               style={{
-                backgroundColor: "#0C6157",
+                backgroundColor: "#17A589",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: 100,
@@ -315,7 +314,7 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].background,
         tabBarStyle: {
-          backgroundColor: "#0C6157",
+          backgroundColor: "#17A589",
         },
         tabBarIndicatorStyle: {
           backgroundColor: Colors[colorScheme].background,

@@ -1,25 +1,86 @@
 import { StyleSheet } from "react-native";
-
-import { Text, View } from "../components/Themed";
+import { Text, View, Image } from "react-native";
 
 export default function TabTwoScreen() {
+  const image =
+    "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+    <View>
+      <View style={styles.container}>
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 40,
+            marginRight: 10,
+            marginTop: 5,
+          }}
+        />
+        <View>
+          <Text style={{ fontWeight: "bold" }}>Ahri 2964</Text>
+          <Text style={{ color: "red" }}>Cuộc gọi nhỡ</Text>
+        </View>
+      </View>
+      <View style={styles.container}>
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 40,
+            marginRight: 10,
+            marginTop: 5,
+          }}
+        />
+        <View>
+          <Text style={{ fontWeight: "bold" }}>Ahri 2964</Text>
+          <Text style={{ color: "red" }}>Cuộc gọi nhỡ</Text>
+        </View>
+      </View>
+      <View style={styles.container}>
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 40,
+            marginRight: 10,
+            marginTop: 5,
+          }}
+        />
+        <View>
+          <Text style={{ fontWeight: "bold" }}>Ahri 2964</Text>
+          <Text style={{ color: "red" }}>Cuộc gọi nhỡ</Text>
+        </View>
+      </View>
+      <View style={styles.container}>
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 40,
+            marginRight: 10,
+            marginTop: 5,
+          }}
+        />
+        <View>
+          <Text style={{ fontWeight: "bold" }}>Ahri 2964</Text>
+          <Text style={{ color: "red" }}>Cuộc gọi nhỡ</Text>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: 20,
+    marginLeft: 10,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    // borderBottomWidth: 1,
   },
   title: {
     fontSize: 20,

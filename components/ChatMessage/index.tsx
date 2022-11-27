@@ -37,32 +37,7 @@ const ChatMessage = (props: ChatMessageProps) => {
   const isMyMessage = () => {
     return message.sender._id === userID;
   };
-  // const isSameSenderMargin = (
-  //   messages: string | any[],
-  //   m: { sender: { _id: any } },
-  //   i: number,
-  //   userId: any
-  // ) => {
-  //   // console.log(i === messages.length - 1);
 
-  //   if (
-  //     i < messages.length - 1 &&
-  //     messages[i + 1].sender._id === m.sender._id &&
-  //     messages[i].sender._id !== userId
-  //   )
-  //     return "auto auto auto 38px";
-  //   else if (
-  //     (i < messages.length - 1 &&
-  //       messages[i + 1].sender._id !== m.sender._id &&
-  //       messages[i].sender._id !== userId) ||
-  //     (i === messages.length - 1 && messages[i].sender._id !== userId)
-  //   )
-  //     return "auto auto auto 0px";
-  //   else return "auto 10px auto auto";
-  // };
-  // const sizeText = () => {
-  //   return message.content.length === 18;
-  // };
   return (
     <View style={style.container}>
       <View

@@ -7,7 +7,7 @@ import { View } from "../components/Themed";
 import { getAllUserRoute } from "../src/API";
 // import { ChatState } from "../Context/ChatProvider";
 export default function ContactsScreen() {
-  // const { user } = ChatState();
+  const [ischeck, setIsCheck] = useState(true);
   const [users, setUsers] = useState([]);
   let STORAGE_KEY = "@token";
   useEffect(() => {
@@ -21,7 +21,11 @@ export default function ContactsScreen() {
           },
         };
         const usersData = await axios.get(getAllUserRoute, config);
-        setUsers(usersData.data);
+        if (usersData != null) {
+          setUsers(usersData.data);
+        } else {
+          setIsCheck(false);
+        }
       } catch (error) {
         console.log(error);
       }

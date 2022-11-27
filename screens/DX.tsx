@@ -9,6 +9,7 @@ const Logout = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState();
   const navigation = useNavigation();
+  const [phone, setPhone] = useState();
   const getItem = async () => {
     try {
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
@@ -16,6 +17,7 @@ const Logout = () => {
       setAvatar(user1.pic);
       setName(user1.name);
       setEmail(user1.email);
+      setPhone(user1.phone);
     } catch (error) {
       console.log("Lỗi khi get thông tin user tại DX ", error);
     }
@@ -61,37 +63,50 @@ const Logout = () => {
           }}
         />
       </View>
-      <View style={{ marginTop: 10, marginBottom: 10, alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{name}</Text>
-        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{email}</Text>
-      </View>
       <View
         style={{
           borderRadius: 10,
           borderWidth: 1,
-
+          backgroundColor: "#0E6655",
+          marginTop: 10,
           width: 150,
           alignItems: "center",
         }}
       >
-        <TouchableOpacity onPress={updateProfile}>
-          <Text style={{ color: "black", fontWeight: "bold" }}>
+        <TouchableOpacity
+          onPress={updateProfile}
+          // style={{ backgroundColor: "#0E6655", borderColor: "#0E6655" }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>
             Sửa thông tin
           </Text>
         </TouchableOpacity>
       </View>
+      <View style={{ marginTop: 10, marginBottom: 10, alignItems: "center" }}>
+        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{name}</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 20, color: "#0E6655" }}>
+          {email}
+        </Text>
+        <Text style={{ fontWeight: "bold", fontSize: 20, color: "#0E6655" }}>
+          {phone}
+        </Text>
+      </View>
+
       <View
         style={{
           borderRadius: 10,
           borderWidth: 1,
           backgroundColor: "red",
-          width: 100,
+          width: 200,
+          height: 35,
           alignItems: "center",
-          marginTop: 10,
+          marginTop: 300,
         }}
       >
         <TouchableOpacity onPress={logoutUser}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>Đăng Xuất</Text>
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
+            Đăng Xuất
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
