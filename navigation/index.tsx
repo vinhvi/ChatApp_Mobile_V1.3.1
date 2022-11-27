@@ -10,6 +10,7 @@ import {
   DefaultTheme,
   DarkTheme,
   useNavigation,
+  useIsFocused,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
@@ -72,10 +73,13 @@ function RootNavigator() {
   let STORAGE_KEY1 = "@user";
   const [login, setLogin] = useState(false);
   const [avatar, setAvatar] = useState();
+  const isFocused = useIsFocused();
   const keepLogin = async () => {
     try {
       const user = await AsyncStorage.getItem(STORAGE_KEY1);
       const user1 = JSON.parse(user);
+      // console.log("user in system: " + user);
+
       if (user === null) {
         setLogin(false);
       } else {
@@ -88,7 +92,7 @@ function RootNavigator() {
   };
   useEffect(() => {
     keepLogin();
-  }, [login]);
+  }, [isFocused]);
   return (
     <Stack.Navigator
       screenOptions={{

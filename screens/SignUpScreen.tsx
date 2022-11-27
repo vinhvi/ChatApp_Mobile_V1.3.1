@@ -7,6 +7,9 @@ import {
   Alert,
   Image,
   ImagePickerIOS,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import React, { Component, useState } from "react";
@@ -144,122 +147,125 @@ export default function SignUpScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={{ fontWeight: "bold", fontSize: 35, marginTop: 5 }}>
-          Đăng Ký
-        </Text>
-      </View>
-      <View style={styles.photo}>
-        <Image
-          source={{
-            uri: uriImage,
-          }}
-          style={styles.image}
-        />
-        <TouchableOpacity onPress={pickImage}>
-          <View style={styles.borderUpload}>
-            <Text style={styles.upload}>Chọn ảnh đại diện</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.view_textinput}>
-        <TextInput
-          placeholder="Nhập tên "
-          style={styles.textinput}
-          value={name}
-          disableFullscreenUI
-          onChangeText={(e) => setName(e)}
-        />
-      </View>
-      <View style={styles.view_textinput}>
-        <TextInput
-          placeholder="Nhập email "
-          style={styles.textinput}
-          value={email}
-          disableFullscreenUI
-          onChangeText={(e) => setEmail(e)}
-        />
-      </View>
-      <View style={styles.view_textinput}>
-        <TextInput
-          placeholder="Nhập số điện thoại "
-          style={styles.textinput}
-          value={phone}
-          disableFullscreenUI
-          onChangeText={(e) => setPhone(e)}
-        />
-      </View>
-      <RadioButton.Group
-        onValueChange={(newValue) => setChecked(newValue)}
-        value={checked}
-      >
-        <View style={styles.view1_radio}>
-          <View style={styles.view2_radio}>
-            <Text style={{ marginTop: 7 }}>Nam</Text>
-            <RadioButton value="first" />
-            <View style={styles.view2_radio}>
-              <Text style={{ marginTop: 7, marginLeft: 20 }}>Nữ</Text>
-              <RadioButton value="second" />
-            </View>
-            <View style={styles.view2_radio}>
-              <Text style={{ marginTop: 7 }}>Khác</Text>
-              <RadioButton value="three" />
-            </View>
-          </View>
-        </View>
-      </RadioButton.Group>
-      <View style={styles.view_textinput}>
-        <TextInput
-          placeholder="Nhập ngày sinh ( yyyy-
-          mm-dd) "
-          style={styles.textinput}
-          value={date}
-          disableFullscreenUI
-          onChangeText={(e) => setDate(e)}
-        />
-      </View>
-      <View style={styles.view_textinput}>
-        <TextInput
-          placeholder="Nhập mật khẩu "
-          style={styles.textinput}
-          value={password}
-          disableFullscreenUI
-          onChangeText={(e) => setPassword(e)}
-        />
-      </View>
-      <View style={styles.view_textinput}>
-        <TextInput
-          placeholder="Nhập lại mật khẩu "
-          style={styles.textinput}
-          value={password2}
-          disableFullscreenUI
-          onChangeText={(e) => setPassword2(e)}
-        />
-      </View>
-      <TouchableOpacity onPress={onSignUpressed}>
-        <View style={styles.saveinfor}>
-          <Text style={styles.upload1}>
-            {loading ? "Loading..." : "Đăng ký"}
+    <ScrollView>
+      <View style={styles.container1}>
+        <View>
+          <Text style={{ fontWeight: "bold", fontSize: 35, marginTop: 5 }}>
+            Đăng Ký
           </Text>
         </View>
-      </TouchableOpacity>
-      <CustomButton
-        text="Bạn đã có tài khoản ? Đăng nhập ?"
-        type="TERTIARY"
-        onPress={onSignUpPress}
-        bgColor={undefined}
-        fgColor={undefined}
-      />
-    </View>
+        <View style={styles.photo}>
+          <Image
+            source={{
+              uri: uriImage,
+            }}
+            style={styles.image}
+          />
+          <TouchableOpacity onPress={pickImage}>
+            <View style={styles.borderUpload}>
+              <Text style={styles.upload}>Chọn ảnh đại diện</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.view_textinput}>
+          <TextInput
+            placeholder="Nhập tên "
+            style={styles.textinput}
+            value={name}
+            disableFullscreenUI
+            onChangeText={(e) => setName(e)}
+          />
+        </View>
+        <View style={styles.view_textinput}>
+          <TextInput
+            placeholder="Nhập email "
+            style={styles.textinput}
+            value={email}
+            disableFullscreenUI
+            onChangeText={(e) => setEmail(e)}
+          />
+        </View>
+        <View style={styles.view_textinput}>
+          <TextInput
+            placeholder="Nhập số điện thoại "
+            style={styles.textinput}
+            value={phone}
+            disableFullscreenUI
+            onChangeText={(e) => setPhone(e)}
+          />
+        </View>
+        <RadioButton.Group
+          onValueChange={(newValue) => setChecked(newValue)}
+          value={checked}
+        >
+          <View style={styles.view1_radio}>
+            <View style={styles.view2_radio}>
+              <Text style={{ marginTop: 7 }}>Nam</Text>
+              <RadioButton value="first" />
+              <View style={styles.view2_radio}>
+                <Text style={{ marginTop: 7, marginLeft: 20 }}>Nữ</Text>
+                <RadioButton value="second" />
+              </View>
+              <View style={styles.view2_radio}>
+                <Text style={{ marginTop: 7 }}>Khác</Text>
+                <RadioButton value="three" />
+              </View>
+            </View>
+          </View>
+        </RadioButton.Group>
+        <View style={styles.view_textinput}>
+          <TextInput
+            placeholder="Nhập ngày sinh ( yyyy-
+          mm-dd) "
+            style={styles.textinput}
+            value={date}
+            disableFullscreenUI
+            onChangeText={(e) => setDate(e)}
+          />
+        </View>
+        <View style={styles.view_textinput}>
+          <TextInput
+            placeholder="Nhập mật khẩu "
+            style={styles.textinput}
+            value={password}
+            disableFullscreenUI
+            onChangeText={(e) => setPassword(e)}
+          />
+        </View>
+        <View style={styles.view_textinput}>
+          <TextInput
+            placeholder="Nhập lại mật khẩu "
+            style={styles.textinput}
+            value={password2}
+            disableFullscreenUI
+            onChangeText={(e) => setPassword2(e)}
+          />
+        </View>
+        <TouchableOpacity onPress={onSignUpressed}>
+          <View style={styles.saveinfor}>
+            <Text style={styles.upload1}>
+              {loading ? "Loading..." : "Đăng ký"}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <CustomButton
+          text="Bạn đã có tài khoản ? Đăng nhập ?"
+          type="TERTIARY"
+          onPress={onSignUpPress}
+          bgColor={undefined}
+          fgColor={undefined}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
+  container: { flex: 1 },
 
-    // padding: 20,
+  container1: {
+    alignItems: "center",
+    flex: 1,
   },
   image: {
     width: 150,

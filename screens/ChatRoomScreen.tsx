@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import ChatMessage from "../components/ChatMessage";
 import BG from "./../assets/images/BG.png";
